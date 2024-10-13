@@ -136,4 +136,4 @@ elif opcion == 2:
     print(f'The first harmonic frequency is: {first_harmonic_freq:.2f} Hz')
     print(f'The lowest frequency peak is: {lowest_frequency_peak:.2f} Hz')
 else:
-    print("Adios")
+    print("Adios")
