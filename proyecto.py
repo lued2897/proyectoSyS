@@ -90,11 +90,12 @@ if opcion == 1:
 
 elif opcion == 2:
     # Cargar el archivo .wav
-    sample_rate, data = wavfile.read('c4.wav')
+    sample_rate, data = wavfile.read('archivo.wav')
 
     # Si el archivo es estéreo, tomar solo un canal
     if len(data.shape) > 1:
         data = data[:, 0]
+    #data = data/np.max(np.abs(data))
 
     # FFT
     N = len(data)
