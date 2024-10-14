@@ -4,6 +4,13 @@ from scipy.io import wavfile
 from scipy.signal import spectrogram
 import sounddevice as sd
 
+def denoise_freq(fft_magnitude, threshold_ratio=0.3):
+    # Definicion de umbral
+    threshold = np.max(fft_magnitude) * threshold_ratio
+    # Eliminamos las magnitudes abajo del umbral
+    fft_magnitude[fft_magnitude < threshold] = 0
+    return fft_magnitude
+
 print(sd.query_devices())
 
 opcion = int(input("Selecciona una opcion:\n1. Ejecutar Parte 1 del proyecto\n2. Ejecutar parte 2 del proyecto\n3.Salir\n"))
@@ -20,7 +27,7 @@ if opcion == 1:
 
     # Acondicionamiento de la señal
     data = audio_data[:, 0]  # Convertir a una señal unidimensional si es estéreo
-    #data = data/np.max(np.abs(data))
+    data = data/np.max(np.abs(data))
     # FFT
     N = len(data)
     fft_values = np.fft.fft(data)
@@ -30,6 +37,9 @@ if opcion == 1:
     # Ignorar la frecuencia cero y obtener las positivas
     positive_frequencies = frequencies[:N // 2]
     positive_magnitude = fft_magnitude[:N // 2]
+
+    #filtro de ruido
+    positive_magnitude=denoise_freq(positive_magnitude,0.3)
 
     # Encuentra la primera componente armónica
     index_of_first_harmonic = np.argmax(positive_magnitude[1:]) + 1
@@ -57,8 +67,8 @@ if opcion == 1:
     plt.axvline(x=lowest_frequency_peak, color=(0,1,0,0.5), linestyle='--', label=f'Pico más bajo: {lowest_frequency_peak:.2f} Hz')
 
     # Marcar armónicos adicionales
-    for harmonic_freq in harmonics_freqs:
-        plt.axvline(x=harmonic_freq, color=(0,0,1,0.5), linestyle='--', label=f'Armónico: {harmonic_freq:.2f} Hz')
+    #for harmonic_freq in harmonics_freqs:
+    #    plt.axvline(x=harmonic_freq, color=(0,0,1,0.5), linestyle='--', label=f'Armónico: {harmonic_freq:.2f} Hz')
 
     plt.xlabel('Frecuencia (Hz)')
     plt.ylabel('Magnitud')
@@ -82,15 +92,15 @@ if opcion == 1:
     plt.tight_layout()
     plt.show()
 
-    print(f'Frecuencia fundamental:: {first_harmonic_freq:.2f} Hz')
-    print(f'Pico más bajo: {lowest_frequency_peak:.2f} Hz')
-    for i, harmonic_freq in enumerate(harmonics_freqs, start=2):
-        print(f'armónico {i}: {harmonic_freq:.2f} Hz')
+    print(f'Frecuencia principal: {first_harmonic_freq:.2f} Hz')
+    print(f'Frecuencia mas baja: {lowest_frequency_peak:.2f} Hz')
+    #for i, harmonic_freq in enumerate(harmonics_freqs, start=2):
+    #    print(f'armónico {i}: {harmonic_freq:.2f} Hz')
 
 
 elif opcion == 2:
     # Cargar el archivo .wav
-    sample_rate, data = wavfile.read('archivo.wav')
+    sample_rate, data = wavfile.read('violin.wav')
 
     # Si el archivo es estéreo, tomar solo un canal
     if len(data.shape) > 1:
@@ -106,6 +116,9 @@ elif opcion == 2:
     frequencies = np.fft.fftfreq(N, 1 / sample_rate)
     positive_frequencies = frequencies[:N // 2]
     positive_magnitude = fft_magnitude[:N // 2]
+
+    #filtro de ruido
+    positive_magnitude=denoise_freq(positive_magnitude,0.3)
 
     # Encuentra la primera componente armónica
     index_of_first_harmonic = np.argmax(positive_magnitude[1:]) + 1
@@ -129,12 +142,12 @@ elif opcion == 2:
     plt.figure(figsize=(12, 8))
     plt.subplot(2, 1, 1)
     plt.plot(positive_frequencies, positive_magnitude)
-    plt.axvline(x=first_harmonic_freq, color=(1,0,0,0.5), linestyle='--', label=f'Primer armónico: {first_harmonic_freq:.2f} Hz')
-    plt.axvline(x=lowest_frequency_peak, color=(0,1,0,0.5), linestyle='--', label=f'Pico más bajo: {lowest_frequency_peak:.2f} Hz')
+    plt.axvline(x=first_harmonic_freq, color=(1,0,0,0.5), linestyle='--', label=f'Frecuencia principal: {first_harmonic_freq:.2f} Hz')
+    plt.axvline(x=lowest_frequency_peak, color=(0,1,0,0.5), linestyle='--', label=f'FFrecuencia mas baja: {lowest_frequency_peak:.2f} Hz')
 
     # Marcar armónicos adicionales
-    for harmonic_freq in harmonics_freqs:
-        plt.axvline(x=harmonic_freq, color=(0,0,1,0.5), linestyle='--', label=f'Armónico: {harmonic_freq:.2f} Hz')
+    #for harmonic_freq in harmonics_freqs:
+    #    plt.axvline(x=harmonic_freq, color=(0,0,1,0.5), linestyle='--', label=f'Armónico: {harmonic_freq:.2f} Hz')
 
     plt.xlabel('Frecuencia (Hz)')
     plt.ylabel('Magnitud')
@@ -160,8 +173,8 @@ elif opcion == 2:
 
     print(f'The first harmonic frequency is: {first_harmonic_freq:.2f} Hz')
     print(f'The lowest frequency peak is: {lowest_frequency_peak:.2f} Hz')
-    for i, harmonic_freq in enumerate(harmonics_freqs, start=2):
-        print(f'Harmonic {i}: {harmonic_freq:.2f} Hz')
+    #for i, harmonic_freq in enumerate(harmonics_freqs, start=2):
+    #    print(f'Harmonic {i}: {harmonic_freq:.2f} Hz')
 
 else:
     print("Adios")
