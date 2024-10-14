@@ -41,11 +41,11 @@ if opcion == 1:
     #filtro de ruido
     positive_magnitude=denoise_freq(positive_magnitude,0.3)
 
-    # Encuentra la primera componente armónica
+    # Encuentra el armonico principal
     index_of_first_harmonic = np.argmax(positive_magnitude[1:]) + 1
     first_harmonic_freq = positive_frequencies[index_of_first_harmonic]
 
-    # Encuentra el primer pico de frecuencia
+    # Encuentra el armonico fundamental
     threshold = np.max(positive_magnitude) * 0.1
     peaks = np.where(positive_magnitude > threshold)[0]
     lowest_frequency_peak = positive_frequencies[peaks[0]] if len(peaks) > 0 else 0
@@ -120,11 +120,11 @@ elif opcion == 2:
     #filtro de ruido
     positive_magnitude=denoise_freq(positive_magnitude,0.3)
 
-    # Encuentra la primera componente armónica
+    # Encuentra el armonico principal
     index_of_first_harmonic = np.argmax(positive_magnitude[1:]) + 1
     first_harmonic_freq = positive_frequencies[index_of_first_harmonic]
 
-    # Encuentra el primer pico de frecuencia
+    # Encuentra el armonico fundamental
     threshold = np.max(positive_magnitude) * 0.1
     peaks = np.where(positive_magnitude > threshold)[0]
     lowest_frequency_peak = positive_frequencies[peaks[0]] if len(peaks) > 0 else 0
