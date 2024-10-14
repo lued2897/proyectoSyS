@@ -20,7 +20,7 @@ if opcion == 1:
 
     # Acondicionamiento de la señal
     data = audio_data[:, 0]  # Convertir a una señal unidimensional si es estéreo
-
+    #data = data/np.max(np.abs(data))
     # FFT
     N = len(data)
     fft_values = np.fft.fft(data)
@@ -53,12 +53,12 @@ if opcion == 1:
     plt.figure(figsize=(12, 8))
     plt.subplot(2, 1, 1)
     plt.plot(positive_frequencies, positive_magnitude)
-    plt.axvline(x=first_harmonic_freq, color='r', linestyle='--', label=f'First Harmonic: {first_harmonic_freq:.2f} Hz')
-    plt.axvline(x=lowest_frequency_peak, color='g', linestyle='--', label=f'Lowest Frequency Peak: {lowest_frequency_peak:.2f} Hz')
+    plt.axvline(x=first_harmonic_freq, color=(1,0,0,0.5), linestyle='--', label=f'Primer armónico: {first_harmonic_freq:.2f} Hz')
+    plt.axvline(x=lowest_frequency_peak, color=(0,1,0,0.5), linestyle='--', label=f'Pico más bajo: {lowest_frequency_peak:.2f} Hz')
 
     # Marcar armónicos adicionales
     for harmonic_freq in harmonics_freqs:
-        plt.axvline(x=harmonic_freq, color='b', linestyle='--', label=f'Harmonic: {harmonic_freq:.2f} Hz')
+        plt.axvline(x=harmonic_freq, color=(0,0,1,0.5), linestyle='--', label=f'Armónico: {harmonic_freq:.2f} Hz')
 
     plt.xlabel('Frecuencia (Hz)')
     plt.ylabel('Magnitud')
@@ -128,12 +128,12 @@ elif opcion == 2:
     plt.figure(figsize=(12, 8))
     plt.subplot(2, 1, 1)
     plt.plot(positive_frequencies, positive_magnitude)
-    plt.axvline(x=first_harmonic_freq, color='r', linestyle='--', label=f'Primer armónico: {first_harmonic_freq:.2f} Hz')
-    plt.axvline(x=lowest_frequency_peak, color='g', linestyle='--', label=f'Pico más bajo: {lowest_frequency_peak:.2f} Hz')
+    plt.axvline(x=first_harmonic_freq, color=(1,0,0,0.5), linestyle='--', label=f'Primer armónico: {first_harmonic_freq:.2f} Hz')
+    plt.axvline(x=lowest_frequency_peak, color=(0,1,0,0.5), linestyle='--', label=f'Pico más bajo: {lowest_frequency_peak:.2f} Hz')
 
     # Marcar armónicos adicionales
     for harmonic_freq in harmonics_freqs:
-        plt.axvline(x=harmonic_freq, color='b', linestyle='--', label=f'armónico: {harmonic_freq:.2f} Hz')
+        plt.axvline(x=harmonic_freq, color=(0,0,1,0.5), linestyle='--', label=f'Armónico: {harmonic_freq:.2f} Hz')
 
     plt.xlabel('Frecuencia (Hz)')
     plt.ylabel('Magnitud')
