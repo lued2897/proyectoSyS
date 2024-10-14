@@ -16,7 +16,7 @@ if opcion == 1:
     print("Grabando...")
     audio_data = sd.rec(int(duration * sample_rate), samplerate=sample_rate, channels=1, dtype='float64', device=None)
     sd.wait()  # Wait until recording is finished
-    print("Recording complete")
+    print("Grabación terminada")
 
     # Acondicionamiento de la señal
     data = audio_data[:, 0]  # Convertir a una señal unidimensional si es estéreo
@@ -60,9 +60,9 @@ if opcion == 1:
     for harmonic_freq in harmonics_freqs:
         plt.axvline(x=harmonic_freq, color='b', linestyle='--', label=f'Harmonic: {harmonic_freq:.2f} Hz')
 
-    plt.xlabel('Frequency (Hz)')
-    plt.ylabel('Magnitude')
-    plt.title('FFT of the Recorded Audio')
+    plt.xlabel('Frecuencia (Hz)')
+    plt.ylabel('Magnitud')
+    plt.title('FFT del archivo')
     plt.legend()
     plt.grid(True)
 
@@ -73,24 +73,24 @@ if opcion == 1:
 
     plt.subplot(2, 1, 2)
     plt.pcolormesh(times, frequencies_spec, 10 * np.log10(Sxx), shading='gouraud')
-    plt.ylabel('Frequency [Hz]')
-    plt.xlabel('Time [s]')
-    plt.title('Spectrogram of the Recorded Audio')
-    plt.colorbar(label='Intensity [dB]')
+    plt.ylabel('Frecuencia [Hz]')
+    plt.xlabel('Tiempo [s]')
+    plt.title('Espectrograma')
+    plt.colorbar(label='Intensidad [dB]')
     plt.ylim(0, sample_rate // 2)
 
     plt.tight_layout()
     plt.show()
 
-    print(f'The first harmonic frequency is: {first_harmonic_freq:.2f} Hz')
-    print(f'The lowest frequency peak is: {lowest_frequency_peak:.2f} Hz')
+    print(f'Frecuencia fundamental:: {first_harmonic_freq:.2f} Hz')
+    print(f'Pico más bajo: {lowest_frequency_peak:.2f} Hz')
     for i, harmonic_freq in enumerate(harmonics_freqs, start=2):
-        print(f'Harmonic {i}: {harmonic_freq:.2f} Hz')
+        print(f'armónico {i}: {harmonic_freq:.2f} Hz')
 
 
 elif opcion == 2:
     # Cargar el archivo .wav
-    sample_rate, data = wavfile.read('violin.wav')
+    sample_rate, data = wavfile.read('c4.wav')
 
     # Si el archivo es estéreo, tomar solo un canal
     if len(data.shape) > 1:
@@ -128,16 +128,16 @@ elif opcion == 2:
     plt.figure(figsize=(12, 8))
     plt.subplot(2, 1, 1)
     plt.plot(positive_frequencies, positive_magnitude)
-    plt.axvline(x=first_harmonic_freq, color='r', linestyle='--', label=f'First Harmonic: {first_harmonic_freq:.2f} Hz')
-    plt.axvline(x=lowest_frequency_peak, color='g', linestyle='--', label=f'Lowest Frequency Peak: {lowest_frequency_peak:.2f} Hz')
+    plt.axvline(x=first_harmonic_freq, color='r', linestyle='--', label=f'Primer armónico: {first_harmonic_freq:.2f} Hz')
+    plt.axvline(x=lowest_frequency_peak, color='g', linestyle='--', label=f'Pico más bajo: {lowest_frequency_peak:.2f} Hz')
 
     # Marcar armónicos adicionales
     for harmonic_freq in harmonics_freqs:
-        plt.axvline(x=harmonic_freq, color='b', linestyle='--', label=f'Harmonic: {harmonic_freq:.2f} Hz')
+        plt.axvline(x=harmonic_freq, color='b', linestyle='--', label=f'armónico: {harmonic_freq:.2f} Hz')
 
-    plt.xlabel('Frequency (Hz)')
-    plt.ylabel('Magnitude')
-    plt.title('FFT of the Sound File')
+    plt.xlabel('Frecuencia (Hz)')
+    plt.ylabel('Magnitud')
+    plt.title('FFT del archivo')
     plt.legend()
     plt.grid(True)
 
@@ -148,10 +148,10 @@ elif opcion == 2:
 
     plt.subplot(2, 1, 2)
     plt.pcolormesh(times, frequencies_spec, 10 * np.log10(Sxx), shading='gouraud')
-    plt.ylabel('Frequency [Hz]')
-    plt.xlabel('Time [s]')
-    plt.title('Spectrogram of the Sound File')
-    plt.colorbar(label='Intensity [dB]')
+    plt.ylabel('Frecuencia (Hz)')
+    plt.xlabel('Tiempo [s]')
+    plt.title('Espectrograma del archivo')
+    plt.colorbar(label='Intensidad [dB]')
     plt.ylim(0, sample_rate // 2)
 
     plt.tight_layout()
